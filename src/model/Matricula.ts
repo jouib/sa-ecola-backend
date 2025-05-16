@@ -116,4 +116,64 @@ export class Matricula{
     public setStatusMatricula(_dataMatricula: Date): void {
         this.dataMatricula = _dataMatricula;
     }
+    
+    // MÉTODO PARA ACESSAR O BANCO DE DADOS
+    // CRUD Create - READ - Update - Delete
+
+    /**
+     * Retorna uma lista com todos os cursos cadastrados no banco de dados
+     * 
+     * @returns Lista com todos os cursos cadastrados no banco de dados
+     */
+    static async listarMatricula(): Promise<Array<any> | null> {
+        //Criando lista vazia para armazenar as matrículas
+        let listaDeMatricula: Array<any> = [];
+
+        try {
+            const querySelectMatricula = `
+                SELECT m.id_matricula, m.id_aluno, m.id_curso,
+                        m.data_matricula, m.status_matricula,
+                        a.cpf, a.nome, a.sobrenome,
+                        c.nome_curso, c_quant_semestre, c.area_curso
+                        FROM Matricula m
+                        JOIN Aluno a ON m.id_aluno = a.id_aluno
+                        JOIN Curso c ON m.id_curso = c.id_curso;
+                        WHERE m.status_matricula_registro = TRUE;
+            `;
+            const respostaBD = await database.query(querySelectMatricula);
+
+            if (respostaBD.rows.length === 0) {
+                return null;
+            }
+
+            respostaBD.rows.forEach((linha:any) => {
+                const matricula = {
+                    idMatricula: linha.id_matricula,
+                    idAluno: linha.id_aluno,
+                    idCurso: linha.id_curso,
+                    dataMatricula: linha.data_matricula,
+                    statusMatricula: linha.status_matricula,
+                    aluno: {
+                        cpf: linha.cpf,
+                        nome: linha.nome,
+                        sobrenome: linha.sobrenome,
+                    },
+                    curso: {
+                        nomeCurso: linha.nome_curso,
+                        quantSemestre: linha.quant_semestre,
+                        areaCurso: linha.area_curso
+                    }
+                };
+
+                // Adiciona o objeto à lista de empréstimos
+                listaDeMatricula.push(matricula);
+            });
+
+            return listaDeMatricula;
+
+        } catch (error) {
+            console.log(`Erro ao acessar o modelo: ${error}`);
+            return null;
+        }
+    }
 }

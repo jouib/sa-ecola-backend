@@ -21,11 +21,10 @@ CREATE TABLE Matricula (
 	id_aluno INT REFERENCES Aluno(id_aluno),
 	id_curso INT REFERENCES Curso(id_curso),
 	data_matricula DATE NOT NULL,
-	status_matricula VARCHAR (10) NOT NULL
+	status_matricula VARCHAR (20) NOT NULL
 );
 
--- Inserts da tabela Aluno
-
+-- Inserções na tabela Aluno
 INSERT INTO Aluno (cpf, nome, sobrenome, data_nascimento, telefone, endereco, email) 
 VALUES 
 ('50183622218','Marcelo', 'McGregor', '2005-01-15', '16998959876', 'Rua UFC, 123', 'mcgregor@ufc.com'),
@@ -34,7 +33,7 @@ VALUES
 
 
 
--- Inserts da tabela Curso
+-- Inserções na tabela Curso
 
 INSERT INTO Curso (nome_curso, quant_semestre, area_curso) 
 VALUES 
@@ -44,7 +43,7 @@ VALUES
 
 
 
--- Inserts da tabela Matrícula
+-- Inserções na tabela Matrícula
 
 INSERT INTO Matricula (id_aluno, id_curso, data_matricula, status_matricula) 
 VALUES 
