@@ -14,10 +14,10 @@ router.get('/', (req, res) => {
 router.get(SERVER_ROUTES.LISTAR_ALUNOS, AlunoController.todos);
 
 //CRUD Livro
-router.get(SERVER_ROUTES.LISTAR_CURSO, CursoController.todos);
+router.get(SERVER_ROUTES.LISTAR_CURSOS, CursoController.todos);
 
 //CRUD Emprestimo
-router.get(SERVER_ROUTES.LISTAR_MATRICULA, MatriculaController.todos);
+router.get(SERVER_ROUTES.LISTAR_MATRICULAS, MatriculaController.todos);
 
 
 export { router }

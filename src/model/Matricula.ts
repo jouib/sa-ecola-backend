@@ -130,21 +130,8 @@ export class Matricula{
         let listaDeMatricula: Array<any> = [];
 
         try {
-            const querySelectMatricula = `
-                SELECT m.id_matricula, m.id_aluno, m.id_curso,
-                        m.data_matricula, m.status_matricula,
-                        a.cpf, a.nome, a.sobrenome,
-                        c.nome_curso, c_quant_semestre, c.area_curso
-                        FROM Matricula m
-                        JOIN Aluno a ON m.id_aluno = a.id_aluno
-                        JOIN Curso c ON m.id_curso = c.id_curso;
-                        WHERE m.status_matricula_registro = TRUE;
-            `;
+            const querySelectMatricula = `SELECT * FROM Matricula`;
             const respostaBD = await database.query(querySelectMatricula);
-
-            if (respostaBD.rows.length === 0) {
-                return null;
-            }
 
             respostaBD.rows.forEach((linha:any) => {
                 const matricula = {
@@ -152,17 +139,7 @@ export class Matricula{
                     idAluno: linha.id_aluno,
                     idCurso: linha.id_curso,
                     dataMatricula: linha.data_matricula,
-                    statusMatricula: linha.status_matricula,
-                    aluno: {
-                        cpf: linha.cpf,
-                        nome: linha.nome,
-                        sobrenome: linha.sobrenome,
-                    },
-                    curso: {
-                        nomeCurso: linha.nome_curso,
-                        quantSemestre: linha.quant_semestre,
-                        areaCurso: linha.area_curso
-                    }
+                    statusMatricula: linha.status_matricula 
                 };
 
                 // Adiciona o objeto à lista de empréstimos

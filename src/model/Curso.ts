@@ -7,28 +7,28 @@ const database = new DataBaseModel().pool;
  * Classe que representa um curso no sistema
  */
 export class Curso {
-    private idCurso: number = 0; // Identificador único do aluno
-    private nomeCurso: string = ''; // nome do curso
+    private idCurso: number = 0; // Identificador único do curso
+    private nomeCurso: string; // nome do curso
     private quantSemestre: number; // Quantidade de Semestres
     private areaCurso: string; // Área do curso
    
     /**
      * Construtor da classe Aluno
      * 
-     * @param nomeDoCurso Nome do curso
-     * @param quantSemestre Quantidade de Semestre
+     * @param nomeCurso Nome do curso
+     * @param quantSemestre Quantidade de Semestres
      * @param areaCurso Área do curso
      */
     public constructor (_nomeCurso: string, _quantSemestre:number, _areaCurso:string){
-        this.nomeCurso      = _nomeCurso
+        this.nomeCurso      = _nomeCurso;
         this.quantSemestre  = _quantSemestre;
         this.areaCurso      = _areaCurso;
     }
 
-    //métodos GETTERS and SETTERS
+    // Métodos GETTERS e SETTERS
     /**
-     * Retorna o id do aluno
-     * @returns id: id aluno
+     * Retorna o id do curso
+     * @returns id: id curso
      */
     public getIdCurso(): number{
         return this.idCurso;
@@ -88,11 +88,11 @@ export class Curso {
     }
 
     /**
-     * Atribui o parâmetro ao atributo nome
+     * Atribui o parâmetro ao atributo área do curso
      * 
      * @param _areaCurso : área do curso
      */
-    public setNome(_areaCurso: string){  
+    public setAreaCurso(_areaCurso: string){  
         this.areaCurso = _areaCurso;
     }
 
@@ -106,13 +106,10 @@ export class Curso {
      */
     static async listarCursos(): Promise<Array<Curso> | null> {
         // Criando lista vazia para armazenar os cursos
-        let listaDeCurso: Array<Curso> = [];
+        let listaDeCursos: Array<Curso> = [];
 
         try {
-            // Query para consulta no banco de dados
-            const querySelectCurso = `SELECT * FROM Curso WHERE status_curso = true;`;
-
-            // executa a query no banco de dados
+            const querySelectCurso = `SELECT * FROM Curso;`;
             const respostaBD = await database.query(querySelectCurso);    
 
             // percorre cada resultado retornado pelo banco de dados
@@ -123,17 +120,19 @@ export class Curso {
                 let novoCurso = new Curso(
                     curso.nomeCurso,
                     curso.quantSemestre,
-                    curso.areaCurso,
+                    curso.areaCurso
                 );
                 // adicionando o ID ao objeto
                 novoCurso.setIdCurso(curso.id_curso);
+                novoCurso.setQuantSemestre(curso.quant_semestre);
+                novoCurso.setAreaCurso(curso.area_curso)
 
                 // adicionando a pessoa na lista
-                listaDeCurso.push(novoCurso);
+                listaDeCursos.push(novoCurso);
             });
 
             // retornado a lista de pessoas para quem chamou a função
-            return listaDeCurso;
+            return listaDeCursos;
         } catch (error) {
             console.log(`Erro ao acessar o modelo: ${error}`);
             return null;

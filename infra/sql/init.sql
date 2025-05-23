@@ -50,3 +50,7 @@ VALUES
 (1, 2, '18-02-2002', 'Ativa'),
 (2, 1, '02-12-2024', 'Cancelada'),
 (3, 3, '03-07-2025', 'Concluída');
+
+-- Adicionando colunas de status no banco
+ALTER TABLE Aluno ADD COLUMN status_aluno BOOLEAN DEFAULT TRUE; 
+ALTER TABLE Curso ADD COLUMN status_curso BOOLEAN DEFAULT TRUE;

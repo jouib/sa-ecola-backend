@@ -8,7 +8,7 @@ const database = new DataBaseModel().pool;
  */
 export class Aluno {
     private idAluno: number = 0; // Identificador único do aluno
-    private cpf: string = ''; // cpf do aluno
+    private cpf: string; // cpf do aluno
     private nome: string; // Nome do aluno
     private sobrenome: string; // Sobrenome do aluno
     private dataNascimento: Date; // Data de nascimento do aluno
@@ -28,7 +28,7 @@ export class Aluno {
      * @param email Email do Aluno
      */
     public constructor (_cpf: string, _nome:string, _sobrenome:string, _dataNascimento: Date, _telefone:string,_endereco:string, _email:string){
-        this.cpf            = _cpf
+        this.cpf            = _cpf;
         this.nome           = _nome;
         this.sobrenome      = _sobrenome;
         this.dataNascimento = _dataNascimento;
@@ -37,7 +37,7 @@ export class Aluno {
         this.email          = _email;
     }
 
-    //métodos GETTERS and SETTERS
+    // Métodos GETTERS and SETTERS
     /**
      * Retorna o id do aluno
      * @returns id: id aluno
@@ -57,8 +57,8 @@ export class Aluno {
 
     /*
     /**
-     * Retorna o ra do aluno
-     * @returns ra: ra aluno
+     * Retorna o CFF do aluno
+     * @returns CPF: CPF aluno
      */
     public getCPF(): string {
         return this.cpf;
@@ -69,7 +69,7 @@ export class Aluno {
      * 
      * @param _cpf : cpf do aluno
      */
-    public setRA(_cpf: string): void{
+    public setCPF(_cpf: string): void{
         this.cpf = _cpf
     }
     
@@ -168,6 +168,15 @@ export class Aluno {
         return this.email;
     }
 
+     /**
+     * Atribui o parâmetro ao atributo email
+     * 
+     * @param _email : email do aluno
+     */
+     public setEmail(_email: string) {
+        this.email = _email;
+    }
+
 
     // MÉTODO PARA ACESSAR O BANCO DE DADOS
     // CRUD Create - READ - Update - Delete
@@ -183,7 +192,7 @@ export class Aluno {
 
         try {
             // Query para consulta no banco de dados
-            const querySelectAluno = `SELECT * FROM Aluno WHERE status_aluno = true;`;
+            const querySelectAluno = `SELECT * FROM Aluno;`;
 
             // executa a query no banco de dados
             const respostaBD = await database.query(querySelectAluno);    
@@ -200,10 +209,17 @@ export class Aluno {
                     aluno.data_nascimento,
                     aluno.telefone,
                     aluno.endereco,
-                    aluno.email,
+                    aluno.email
                 );
                 // adicionando o ID ao objeto
                 novoAluno.setIdAluno(aluno.id_aluno);
+                novoAluno.setCPF(aluno.cpf);
+                novoAluno.setNome(aluno.nome);
+                novoAluno.setSobrenome(aluno.sobrenome);
+                novoAluno.setDataNascimento(aluno.data_nascimento);
+                novoAluno.setTelefone(aluno.telefone);
+                novoAluno.setEndereco(aluno.endereco);
+                novoAluno.setEmail(aluno.email);
 
                 // adicionando a pessoa na lista
                 listaDeAlunos.push(novoAluno);
