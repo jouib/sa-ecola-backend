@@ -240,19 +240,19 @@ export class Aluno {
      */
     static async cadastrarAluno(aluno: Aluno): Promise<Boolean> {      
         try {
-            // Cria a consulta (query) para inserir o registro de um aluno no banco de dados, retorna o ID do aluno que foi criado no final
-            const queryInsertAluno = `
-                INSERT INTO Aluno (cpf, nome, sobrenome, data_nascimento, telefone, endereco, email)
-                VALUES (
-                    '${aluno.getCPF()}',
-                    '${aluno.getNome().toUpperCase()}',
-                    '${aluno.getSobrenome().toUpperCase()}',
-                    '${aluno.getDataNascimento()}',
-                    '${aluno.getTelefone()}',
-                    '${aluno.getEndereco().toUpperCase()}',
-                    '${aluno.getEmail().toLowerCase()}',
-                )
-                RETURNING id_aluno;`;
+             // Cria a consulta (query) para inserir o registro de um aluno no banco de dados, retorna o ID do aluno que foi criado no final
+             const queryInsertAluno = `
+             INSERT INTO Aluno (cpf, nome, sobrenome, data_nascimento, telefone, endereco, email)
+             VALUES (
+                 '${aluno.getCPF()}',
+                 '${aluno.getNome().toUpperCase()}',
+                 '${aluno.getSobrenome().toUpperCase()}',
+                 '${aluno.getDataNascimento()}',
+                 '${aluno.getTelefone()}',
+                 '${aluno.getEndereco().toUpperCase()}',
+                 '${aluno.getEmail().toLowerCase()}'
+             )
+             RETURNING id_aluno;`;
 
             // Executa a query no banco de dados e armazena o resultado
             const result = await database.query(queryInsertAluno);

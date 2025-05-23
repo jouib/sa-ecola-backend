@@ -12,11 +12,13 @@ router.get('/', (req, res) => {
 
 // CRUD Aluno
 router.get(SERVER_ROUTES.LISTAR_ALUNOS, AlunoController.todos);
+router.post(SERVER_ROUTES.NOVO_ALUNO, AlunoController.cadastrar);
 
-//CRUD Livro
+//CRUD Curso
 router.get(SERVER_ROUTES.LISTAR_CURSOS, CursoController.todos);
+router.post(SERVER_ROUTES.NOVO_CURSO, CursoController.cadastrar);
 
-//CRUD Emprestimo
+//CRUD Matricula
 router.get(SERVER_ROUTES.LISTAR_MATRICULAS, MatriculaController.todos);
 
 

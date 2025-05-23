@@ -138,4 +138,37 @@ export class Curso {
             return null;
         }
     }
+
+    /**
+     * Cadastra um novo curso no banco de dados.
+     * @param curso Objeto Curso contendo as informações a serem cadastradas
+     * @returns Boolean indicando se o cadastro foi bem-sucedido
+     */
+    static async novo(curso: Curso): Promise<Boolean> {
+        try {
+            const queryInsertCurso = `
+                INSERT INTO Curso (nome_curso, quant_semestre, area_curso)
+                VALUES (
+                    '${curso.getNomeCurso()}',
+                    '${curso.getQuantSemestre()}',
+                    '${curso.getAreaCurso()}'
+                )
+                RETURNING id_curso;`;
+            const result = await database.query(queryInsertCurso);
+
+            if (result.rows.length > 0) {
+                console.log(`Curso cadastrado com sucesso. ID: ${result.rows[0].id_curso}`);
+                return true;
+            }
+
+            // caso a consulta não tenha tido sucesso, retorna falso
+            return false;
+            // captura erro
+        } catch (error) {
+            // Exibe mensagem com detalhes do erro no console
+            console.error(`Erro ao cadastrar curso ${error}`);
+             // retorna falso
+            return false;
+        }
+    }
 }
