@@ -112,7 +112,7 @@ export class Aluno {
      * Retorna a dataNascimento do aluno
      * @returns datanascimento: dataNascimento aluno
      */
-    public getDataNascimento() {
+    public getDataNascimento(): Date {
         return this.dataNascimento;
     }
 
@@ -121,7 +121,7 @@ export class Aluno {
      * 
      * @param _dataNascimento : dataNascimento do aluno
      */
-    public setDataNascimento(_dataNascimento: Date) {
+    public setDataNascimento(_dataNascimento: Date): void {
         this.dataNascimento = _dataNascimento;
     }
 
@@ -238,24 +238,27 @@ export class Aluno {
      * @param aluno Objeto Aluno contendo as informações a serem cadastradas
      * @returns Boolean indicando se o cadastro foi bem-sucedido
      */
-    static async cadastrarAluno(aluno: Aluno): Promise<Boolean> {      
+    static async cadastrarAlunos(aluno: Aluno): Promise<Boolean> {      
         try {
              // Cria a consulta (query) para inserir o registro de um aluno no banco de dados, retorna o ID do aluno que foi criado no final
-             const queryInsertAluno = `
-             INSERT INTO Aluno (cpf, nome, sobrenome, data_nascimento, telefone, endereco, email)
-             VALUES (
-                 '${aluno.getCPF()}',
-                 '${aluno.getNome().toUpperCase()}',
-                 '${aluno.getSobrenome().toUpperCase()}',
-                 '${aluno.getDataNascimento()}',
-                 '${aluno.getTelefone()}',
-                 '${aluno.getEndereco().toUpperCase()}',
-                 '${aluno.getEmail().toLowerCase()}'
-             )
-             RETURNING id_aluno;`;
+             const queryInsertAluno =`
+                INSERT INTO Aluno (cpf, nome, sobrenome, data_nascimento, telefone, endereco, email)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING id_aluno;
+            `;
+
+            const params = [
+                aluno.getCPF(),
+                aluno.getNome(),
+                aluno.getSobrenome(),
+                aluno.getDataNascimento(),
+                aluno.getTelefone(),
+                aluno.getEndereco(),
+                aluno.getEmail()
+            ];
 
             // Executa a query no banco de dados e armazena o resultado
-            const result = await database.query(queryInsertAluno);
+            const result = await database.query(queryInsertAluno, params);
 
             // verifica se a quantidade de linhas que foram alteradas é maior que 0
             if (result.rows.length > 0) {

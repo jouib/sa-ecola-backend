@@ -15,14 +15,14 @@ interface CursoDTO {
 /**
  * Controlador para operações realacionadas ao curso.
  */
-class CursoController extends Curso {
+export class CursoController {
     /**
      * lista todos os cursos.
      * @param req 
      * @param res
      * @returns lista de alunos em formato JSON.
      */
-    static async todos(req: Request, res: Response) {
+    static async todos(req: Request, res: Response): Promise<any> {
         try {
             const listaDeCursos = await Curso.listarCursos();
             res.status(200).json(listaDeCursos);
@@ -36,11 +36,11 @@ class CursoController extends Curso {
 
     /**
      * Cadastra um novo curso.
-     * @param req Objeto de requisição HTTP com os dados do aluno.
+     * @param req Objeto de requisição HTTP com os dados do curso.
      * @param res Objeto de resposta HTTP.
-     * @returns Mensagem de sucesso ou erro em formato JSON.
+     * @return Mensagem de sucesso ou erro em formato JSON.
      */
-    static async cadastrar(req: Request, res: Response) {
+    static async novo(req: Request, res: Response): Promise<any> {
         try {
             const dadosRecebidos: CursoDTO = req.body;
 
@@ -50,21 +50,17 @@ class CursoController extends Curso {
                 dadosRecebidos.areaCurso
             );
 
-            // Chama o método para persistir o aluno no banco de dados
-            const result = await Curso.cadastrarCurso(novoCurso);
+            const result = await Curso.cadastrarCursos(novoCurso);
 
-            // Verifica se a query foi executada com sucesso
             if (result) {
                 return res.status(200).json(`Curso cadastrado com sucesso`);
             } else {
-                return res.status(400).json('Não foi possível cadastrar o curso no banco de dados');
+                return res.status(400).json(`Não foi possível cadastrar o curso no banco de dados`);
             }
         } catch (error) {
             console.log(`Erro ao cadastrar o curso: ${error}`);
-            return res.status(400).json('Erro ao cadastrar o curso')
+            return res.status(400).json('Erro ao cadastrar o curso');
         }
     }
 }
 export default CursoController;
-
-

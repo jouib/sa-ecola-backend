@@ -18,7 +18,7 @@ interface AlunoDTO {
 /**
  * Controlador para operações relacionadas aos alunos.
  */
-class AlunoController extends Aluno {
+class AlunoController {
 
     /**
      * Lista todos os alunos.
@@ -44,7 +44,7 @@ class AlunoController extends Aluno {
      * @param res Objeto de resposta HTTP.
      * @return Mensagem de sucesso ou erro em formato JSON.
      */
-    static async cadastrar(req: Request, res: Response) {
+    static async novo(req: Request, res: Response): Promise<any> {
         try {
             const dadosRecebidos: AlunoDTO = req.body;
 
@@ -58,7 +58,7 @@ class AlunoController extends Aluno {
                 dadosRecebidos.email ?? ''
             );
 
-            const result = await Aluno.cadastrarAluno(novoAluno);
+            const result = await Aluno.cadastrarAlunos(novoAluno);
             
             if (result) {
                 return res.status(200).json(`Aluno cadastrado com sucesso`);

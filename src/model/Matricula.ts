@@ -41,7 +41,7 @@ export class Matricula{
     }
 
     /**
-     * Atribui o parâmetro ao atributo idEmprestimo
+     * Atribui o parâmetro ao atributo idMatricula
      * 
      * @param _idMatricuka : idMatricula
      */
@@ -92,9 +92,9 @@ export class Matricula{
     }
 
     /**
-     * Atribui o parâmetro ao atributo dataEmprestimo
+     * Atribui o parâmetro ao atributo dataMatricula
      * 
-     * @param _dataEmprestimo : data do empréstimo
+     * @param _dataMatricula : data do empréstimo
      */
     public setDataMatricula(_dataMatricula: Date): void {
         this.dataMatricula = _dataMatricula;
@@ -151,6 +151,53 @@ export class Matricula{
         } catch (error) {
             console.log(`Erro ao acessar o modelo: ${error}`);
             return null;
+        }
+    }
+
+    /**
+     * Cadastra uma Matrícula
+     * 
+     * @param idAluno ID do aluno
+     * @param idCurso ID do curso
+     * @param dataMatricula data da matrícula
+     * @param statusMatricula status da matrícula
+     * @returns true se cadastrou com sucesso, false caso contrário
+     */
+    static async cadastrarMatricula(
+        idAluno: number,
+        idCurso: number, 
+        dataMatricula: Date,
+        statusMatricula: string
+    ): Promise<any> {
+        try {
+            // Cria a consulta (query) para inserir um empréstimo na tabela retornando o ID do empréstimo criado
+            const queryInsertMatricula = `
+                INSERT INTO Matricula (id_aluno, id_curso, data_matricula, status_matricula)
+                VALUES ($1, $2, $3, $4) RETURNING id_matricula;
+            `;
+
+            // estrutura os valores recebidos pela função em uma lista (array)
+            const valores = [idAluno, idCurso, dataMatricula, statusMatricula];
+            // realizada a consulta no banco de dados e armazena o resultado
+            const resultado = await database.query(queryInsertMatricula, valores);
+
+            // verifica se a quantidade de linhas alteradas é diferente de 0
+            if(resultado.rowCount != 0) {
+                // exibe mensagem de sucesso no console
+                console.log(`Matrícula cadastrada com sucesso! ID: ${resultado.rows[0].id_matricula}`);
+                // retorna o ID do empréstimo
+                return resultado.rows[0].id_matricula;
+            }
+
+            // retorna falso
+            return false;
+        
+        // captura qualquer tipo de erro que possa acontecer
+        } catch (error) {
+            // exibe o detalhe do erro no console
+            console.error(`Erro ao cadastrar matrícula: ${error}`);
+            // lança um novo erro
+            throw new Error('Erro ao cadastrar a matrícula.');
         }
     }
 }

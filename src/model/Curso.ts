@@ -44,10 +44,10 @@ export class Curso {
     }
 
     /**
-     * Retorna o id do aluno
-     * @returns id: id aluno
+     * Retorna o nome do curso
+     * @returns o nome do curso
      */
-    public getNomeCurso(): string{
+    public getNomeCurso(){
         return this.nomeCurso;
     }
 
@@ -56,7 +56,7 @@ export class Curso {
      * 
      * @param _nomeCurso : nomeCurso
      */
-    public setNomeCurso(_nomeCurso: string): void{
+    public setNomeCurso(_nomeCurso: string){
         this.nomeCurso = _nomeCurso;
     }
 
@@ -124,6 +124,7 @@ export class Curso {
                 );
                 // adicionando o ID ao objeto
                 novoCurso.setIdCurso(curso.id_curso);
+                novoCurso.setNomeCurso(curso.nome_curso);
                 novoCurso.setQuantSemestre(curso.quant_semestre);
                 novoCurso.setAreaCurso(curso.area_curso)
 
@@ -144,17 +145,21 @@ export class Curso {
      * @param curso Objeto Curso contendo as informações a serem cadastradas
      * @returns Boolean indicando se o cadastro foi bem-sucedido
      */
-    static async novo(curso: Curso): Promise<Boolean> {
+    static async cadastrarCursos(curso: Curso): Promise<Boolean> {
         try {
             const queryInsertCurso = `
                 INSERT INTO Curso (nome_curso, quant_semestre, area_curso)
-                VALUES (
-                    '${curso.getNomeCurso()}',
-                    '${curso.getQuantSemestre()}',
-                    '${curso.getAreaCurso()}'
-                )
-                RETURNING id_curso;`;
-            const result = await database.query(queryInsertCurso);
+                VALUES ($1, $2, $3)
+                RETURNING id_curso;
+            `;
+
+            const params = [
+                curso.getNomeCurso(),
+                curso.getQuantSemestre(),
+                curso.getAreaCurso()
+            ];
+
+            const result = await database.query(queryInsertCurso, params);
 
             if (result.rows.length > 0) {
                 console.log(`Curso cadastrado com sucesso. ID: ${result.rows[0].id_curso}`);
@@ -171,4 +176,7 @@ export class Curso {
             return false;
         }
     }
+
+    
+    
 }
